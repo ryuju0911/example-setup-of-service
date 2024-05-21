@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	exampleapi "example"
+	"example/db"
 	example "example/gen/example"
+	"example/service"
 	"flag"
 	"fmt"
 	"log"
@@ -35,12 +36,19 @@ func main() {
 		logger = log.New(os.Stderr, "[exampleapi] ", log.Ltime)
 	}
 
+	// Connect to database.
+	db, err := db.ConnectToDB()
+	if err != nil {
+		logger.Fatalf("cannot connect to database: %s\n", err)
+	}
+	defer db.Close()
+
 	// Initialize the services.
 	var (
 		exampleSvc example.Service
 	)
 	{
-		exampleSvc = exampleapi.NewExample(logger)
+		exampleSvc = service.NewExampleSvc(db, logger)
 	}
 
 	// Wrap the services in endpoints that can be invoked from other services
