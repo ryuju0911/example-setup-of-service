@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS example (
+    "id" UUID PRIMARY KEY,
+    "content" VARCHAR,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
